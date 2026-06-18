@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "setup": "bash .cursor/setup-local.sh",
+    "start:local": "bash scripts/startup.sh",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
