@@ -1,4 +1,5 @@
 import { createSlackAdapter } from "@chat-adapter/slack";
+import { createMemoryState } from "@chat-adapter/state-memory";
 import { createRedisState } from "@chat-adapter/state-redis";
 import { getToken } from "@vercel/connect";
 import { Chat } from "chat";
@@ -29,6 +30,23 @@ function verifyConnectForwardedSlackRequest() {
   return true;
 }
 
+function createBotState() {
+  if (process.env.REDIS_URL) {
+    return createRedisState();
+  }
+
+  if (process.env.NODE_ENV === "development") {
+    console.warn(
+      "[repo-watch] REDIS_URL not set — using in-memory state (dev only)",
+    );
+    return createMemoryState();
+  }
+
+  throw new Error(
+    "REDIS_URL is required in production. Use Upstash Redis or set NODE_ENV=development for local dev.",
+  );
+}
+
 export function getBot() {
   if (!bot) {
     bot = new Chat({
@@ -43,7 +61,7 @@ export function getBot() {
               botToken: getSlackBotToken,
             }),
       },
-      state: createRedisState(),
+      state: createBotState(),
       dedupeTtlMs: 600_000,
     }).registerSingleton();
 

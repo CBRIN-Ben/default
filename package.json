@@ -4,16 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "setup": "bash .cursor/setup-local.sh",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "@chat-adapter/slack": "^4.30.0",
-    "@chat-adapter/state-redis": "^4.30.0",
+    "@chat-adapter/slack": "^4.31.0",
+    "@chat-adapter/state-memory": "^4.31.0",
+    "@chat-adapter/state-redis": "^4.31.0",
     "@vercel/connect": "^0.2.4",
     "ai": "^6.0.205",
-    "chat": "^4.30.0",
+    "chat": "^4.31.0",
     "next": "16.2.9",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -29,14 +31,5 @@
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@swc/core",
-      "cbor-extract",
-      "esbuild",
-      "sharp",
-      "unrs-resolver"
-    ]
   }
 }

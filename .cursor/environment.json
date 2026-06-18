@@ -1,0 +1,10 @@
+{
+  "install": "chmod +x .cursor/setup-local.sh && .cursor/setup-local.sh",
+  "start": "pnpm dev --hostname 0.0.0.0 --port 3000",
+  "terminals": [
+    {
+      "name": "Repo Watch dev server",
+      "command": "pnpm dev --hostname 0.0.0.0 --port 3000"
+    }
+  ]
+}

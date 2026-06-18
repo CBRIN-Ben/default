@@ -77,6 +77,45 @@ curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/dige
   accept Slack webhooks directly.
 - Prefer short-lived Vercel Connect tokens (`getToken`) for outbound API auth.
 
+## Cursor Cloud specific instructions
+
+Local setup is automated:
+
+```bash
+pnpm setup    # creates .env.local, installs deps
+pnpm dev      # http://localhost:3000
+```
+
+Cloud agents use `.cursor/environment.json` to run the same setup on boot.
+
+Verify the app is running:
+
+```bash
+curl http://localhost:3000/api/dev/status
+curl http://localhost:3000/api/dev/repos
+```
+
+### Required Cursor secrets (for full Slack + AI)
+
+Add these in **Cursor Dashboard → Cloud Agents → Secrets**:
+
+| Secret | Purpose |
+| --- | --- |
+| `SLACK_BOT_TOKEN` | Bot token from your Slack app (`xoxb-...`) |
+| `SLACK_SIGNING_SECRET` | Signing secret from Slack app settings |
+| `AI_GATEWAY_API_KEY` | Vercel AI Gateway key for @mention Q&A |
+
+`GITHUB_TOKEN` is auto-populated from `gh auth token` when available. For production, use Vercel Connect (`CONNECTOR_SLACK`, `CONNECTOR_GITHUB`) instead of long-lived tokens.
+
+### Slack app (one-time)
+
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) → **Create New App** → **From a manifest**
+2. Paste `slack-manifest.json` from this repo (update the webhook URL after deploy)
+3. Install to workspace → copy **Bot User OAuth Token** and **Signing Secret** into Cursor secrets
+4. Invite the bot: `/invite @repo-watch` in `#repo-watch`
+
+For local Slack webhooks, expose the dev server with ngrok and set the Event Subscriptions URL to `https://<ngrok>/api/webhooks/slack`.
+
 ## Before committing
 
 - `pnpm exec tsc --noEmit` reports no type errors.
